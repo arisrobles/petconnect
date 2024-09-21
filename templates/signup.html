@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Sign Up - PetConnect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="data:,">
+    <link rel="icon" href="/assets/logos/logo_browser.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to left, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.5) 50%), url(/assets/logos/adopt.jpg);
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            text-align: center;
+            background: linear-gradient(to left, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.5) 50%);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: orange;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 48%; /* Each form group takes half the width */
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="location"],
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: orange;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: burlywood;
+        }
+
+        .signin-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .signin-link {
+            color: red;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .signin-link:hover {
+            color: burlywood;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 35%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: black;
+        }
+
+        .username-input-container {
+            position: relative;
+        }
+
+        .username-feedback {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        .terms-container {
+            text-align: left;
+            margin-bottom: 25px;
+            margin-top: 25px;
+            color: white;
+        }
+        .terms-container label {
+            font-size: 14px;
+            font-weight: lighter;
+        }
+        .terms-container a {
+            color: orange;
+            text-decoration: none;
+        }
+        .terms-container a:hover {
+            text-decoration: underline;
+        }
+        button:disabled {
+        cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register Account</h2>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" placeholder="Enter your last name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="username-input-container">
+                    <input type="text" id="username" name="username" placeholder="Enter a unique username" required>
+                    <span class="username-feedback" id="username-feedback"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-input-container">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility()">
+                        <i id="passwordToggleIcon" class="fas fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter a valid email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="Enter your location" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="">Select your role</option>
+                    <option value="PetOwner">Pet Owner</option>
+                    <option value="Adopter">Adopter</option>
+                    <option value="Shelter">Shelter</option>
+                    <option value="VeterinaryClinics">Veterinary Clinics</option>
+                </select>
+            </div>
+
+             <!-- Terms and Conditions checkbox -->
+             <div class="terms-container">
+                <input type="checkbox" id="terms-checkbox">
+                <label for="terms-checkbox">
+                    By signing up you agree to our <a href="/public/terms.html">Terms and Conditions</a> and <a href="/public/privacy.html">Privacy Policy</a>.
+                </label>
+            </div>
+            
+            <button type="submit" id="signupBtn" disabled>Sign Up</button>
+            <p id="error-message" style="color: red; display: none;"></p>
+        </form>
+        <div class="signin-message">
+            <p>Already have an account? <a href="signin.html" class="signin-link">Sign in</a>.</p>
+        </div>
+    </div> 
+
+    <script>
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
+            var passwordToggleIcon = document.getElementById("passwordToggleIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                passwordToggleIcon.classList.remove("fa-eye");
+                passwordToggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                passwordToggleIcon.classList.remove("fa-eye-slash");
+                passwordToggleIcon.classList.add("fa-eye");
+            }
+        }
+
+            // Enable the Sign Up button when the checkbox is checked
+            document.getElementById("terms-checkbox").addEventListener("change", function() {
+            var signupBtn = document.getElementById("signupBtn");
+            signupBtn.disabled = !this.checked; // Enable/disable based on checkbox status
+            });
+
+            document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+            var firstname = document.getElementById("firstname").value;
+            var lastname = document.getElementById("lastname").value;
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var email = document.getElementById("email").value;
+            var location = document.getElementById("location").value;
+            var role = document.getElementById("role").value; // Get the selected role
+            var errorMessage = document.getElementById("error-message");
+
+            // You can perform client-side validation here
+
+            // Reset error message
+            errorMessage.style.display = "none";
+            errorMessage.textContent = "";
+
+            fetch(`http://localhost:3000/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    password: password,
+                    email: email,
+                    location: location,
+                    role: role // Include the role in the request
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message); // Log the success message
+                // Redirect user or show success notification
+                window.location.href = 'verificationMessage.html'; // Redirect to a success page
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                if (error.message === 'Username already exists. Please choose a different username.') {
+                    // Show the error message below the form
+                    errorMessage.style.display = "block";
+                    errorMessage.textContent = error.message;
+                }
+            });
+        });
+        // Function to perform real-time validation of username
+        function validateUsername() {
+            var username = document.getElementById("username").value;
+            var usernameFeedback = document.getElementById("username-feedback");
+
+            // Check if the username input is empty
+            if (username.trim() === "") {
+                usernameFeedback.innerHTML = ""; // Clear the feedback icon
+                return; // Exit the function
+            }
+
+            // Check if username meets the specified condition
+            var usernameRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,}$/; // Letters, numbers, and special characters, at least one of each, 3 characters long
+            if (!usernameRegex.test(username)) {
+                usernameFeedback.innerHTML = '<i class="fas fa-exclamation-circle" style="color: red;"></i>';
+                return; // Exit the function
+            }
+
+            // Username meets requirements
+            usernameFeedback.innerHTML = '<i class="fas fa-check-circle" style="color: green;"></i>';
+        }
+
+        // Add event listener for real-time validation
+        document.getElementById("username").addEventListener("input", validateUsername);
+    </script>
+</body>
+</html>
