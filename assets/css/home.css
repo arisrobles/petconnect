@@ -163,6 +163,11 @@ nav {
         max-width: 120px;
         height: 50px;
         font-size: 14px;
+        margin-top: -10px;
+    }
+    .container h2 {
+        margin: 0;
+        margin-left: -4%;
     }
 
     .menu-toggle {
@@ -170,6 +175,13 @@ nav {
     }
 }
 
+html, body {
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%; /* Ensure body width fits the viewport */
+}
     * {
         margin: 0;
         padding: 0;
@@ -259,6 +271,15 @@ nav {
     text-align: justify;
 }
 
+.contentMessage h2 {
+    font-family: Arial, sans-serif; /* Use a common font stack */
+    font-weight: bold;
+    color: #fff;
+    font-size: 30px;
+    margin-bottom: 20px; /* Add margin to create space between heading and paragraph */
+    text-align: justify;
+}
+
 .contentMessage p {
     font-family: Arial, sans-serif; /* Use a common font stack */
     font-weight: bold;
@@ -274,23 +295,6 @@ nav {
         opacity: 1;
     }
 }
-    .content {
-        text-align: center; /* Center align the content */
-        padding: 50px; /* Adjust top and bottom padding */
-    }
-    .content h1, .content h2, .content h3 {
-        font-family: 'Comic Sans MS', cursive; /* Using Comic Sans MS for a friendly, approachable feel */
-        color: white
-    }
-    .content h1 {
-        font-weight: bold;
-        color: #fff;
-        font-size: 50px;
-    }
-    .content h2 {
-        color: white;
-        font-size: 40px;
-    }
     .container-form {
     max-width: 400px;
     margin: 0 auto;
@@ -604,7 +608,8 @@ button:disabled {
     display: flex; /* Use flexbox for horizontal alignment */
     gap: 20px; /* Add space between cards */
 }
-/* Add CSS to display cards horizontally */
+
+/* Style for card container */
 .card-container {
     display: flex; /* Use flexbox */
     flex-direction: row; /* Arrange cards horizontally */
@@ -625,6 +630,44 @@ button:disabled {
     line-height: normal;
     margin-bottom: 5px;
 }
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .section,
+    .card-container {
+        flex-direction: column; /* Stack cards vertically */
+        gap: 15px; /* Adjust gap between items */
+    }
+
+    .card {
+        width: 100%; /* Ensure cards take full width on smaller screens */
+        margin-right: 0; /* Remove margin on the right */
+        border-radius: 10px; /* Adjust border radius for full rectangle */
+    }
+
+    .dialog-content {
+        width: 90%; /* Make the dialog content take more width on small screens */
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+}
+
+/* Media query for very small screens (like mobile) */
+@media (max-width: 480px) {
+    #card h4 {
+        font-size: 22px; /* Adjust font size for smaller screens */
+    }
+
+    .dialog-content {
+        font-size: 14px; /* Adjust font size for better readability on mobile */
+        padding: 10px; /* Reduce padding */
+    }
+
+    .section,
+    .card-container {
+        gap: 10px; /* Further adjust spacing for smaller screens */
+    }
+}
+
 /* Style for qoute container */
 .quote-container {
         width: 100%;
@@ -811,40 +854,43 @@ button:disabled {
         padding: 5px;
     }
     .quote-container {
-        height: 50vh;
+        height: 40vh;
     }
     .quote-text {
-        font-size: 40px;
+        font-size: 30px;
+    }
+
+    .contentMessage {
+        margin-right: 10%;
     }
     .contentMessage h1 {
-        font-size: 40px;
-        text-align: left;
+        font-size: 30px;
+        text-align: left; /* Optional, since the parent class already has right alignment */
+        margin-top: 20px;
     }
+
+    .contentMessage h2 {
+        font-family: Arial, sans-serif; /* Use a common font stack */
+        font-weight: bold;
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 20px; /* Add margin to create space between heading and paragraph */
+        text-align: justify;
+    }
+    
     .contentMessage p {
-        font-size: 15px;
-        line-height: 25px;
-    }
-    .dialog-content {
-        height: 50%;
-    }
-    #aboutUsContent p {
         font-size: 14px;
+        line-height: 15px;
+        text-align: left; /* Optional, for consistency */
+        margin-right: 5%; /* Adjust the margin as needed */
     }
-    #aboutUsContent h4 { 
-        font-size: 22px;
-    }
-    #faqContent p {
-        font-size: 14px;
-    }
-    #faqContent h4 { 
-        font-size: 22px;
-    }
-    .card{
+
+    .container-fluid {
         width: 100%;
-        height: 80%;
-    }
-    .card-container{
-        width: 200%;
-        height: 80%;
+        min-height: 80vh; /* Full viewport height */
+        position: relative; /* To position the slides absolutely within it */
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
     }
 }

@@ -114,11 +114,11 @@ nav ul li i {
             margin-top: 15px;
         }
 
-        .notifications-dropdown {
+.notifications-dropdown {
     position: fixed;
     top: 110px;
-    right: 5%; /* Use right instead of margin-left for better positioning */
-    width: 300px;
+    right: 5%; /* Right position for larger screens */
+    width: 300px; /* Fixed width for larger screens */
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -129,32 +129,43 @@ nav ul li i {
     z-index: 2000; /* Ensure it appears above other content */
 }
 
+.notifications-dropdown ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
 
-        .notifications-dropdown ul {
-            list-style: none;
-            padding: 10px;
-            margin: 0;
-        }
+.notifications-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 14px;
+    cursor: pointer;
+}
 
-        .notifications-dropdown li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            font-family: 'Comic Sans MS', cursive;
-            font-size: 14px;
-            cursor: pointer;
-        }
+.notifications-dropdown li:last-child {
+    border-bottom: none;
+}
 
-        .notifications-dropdown li:last-child {
-            border-bottom: none;
-        }
+.notifications-dropdown li:hover {
+    background-color: #f5f5f5;
+}
 
-        .notifications-dropdown li:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .notifications-dropdown li.new-notification {
-            background-color: #eaf6ff; /* Light blue background for new notifications */
-        }
+.notifications-dropdown li.new-notification {
+    background-color: #eaf6ff; /* Light blue background for new notifications */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    .notifications-dropdown {
+        right: 0; /* Align to the left edge of the screen */
+        width: 100%; /* Full width on smaller screens */
+        height: 80%; /* Adjust height as needed */
+        border-radius: 0; /* Remove border radius for full width */
+        box-shadow: none; /* Optionally remove shadow for simplicity */
+    }
+}
+
     
         .dialog-box {
     position: fixed;
@@ -214,39 +225,58 @@ nav ul li i {
     background-color: #999;
 }
 
+.toast-container {
+    position: fixed;
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 20px;
+    z-index: 10000;
+    border-radius: 5px;
+    width: 300px; /* Default width */
+}
 
-        .toast-container {
-            position: fixed;
-            background: white;
-            color: black;
-            border: 1px solid black;
-            padding: 20px;
-            z-index: 10000;
-            border-radius: 5px;
-        }
+.toast-message {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
 
-        .toast-message {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
+.toast-container button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
 
-        .toast-container button {
-            margin: 5px;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+.toast-container button:first-child {
+    background: green;
+    color: white;
+}
 
-        .toast-container button:first-child {
-            background: green;
-            color: white;
-        }
+.toast-container button:last-child {
+    background: red;
+    color: white;
+}
 
-        .toast-container button:last-child {
-            background: red;
-            color: white;
-        }
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .toast-container {
+        width: 90%; /* Make it responsive */
+        left: 50%; /* Center horizontally */
+        transform: translateX(-50%); /* Center alignment */
+        padding: 15px; /* Adjust padding */
+    }
+
+    .toast-message {
+        font-size: 14px; /* Smaller font size for better fit */
+    }
+
+    .toast-container button {
+        padding: 8px 15px; /* Adjust button padding for smaller screens */
+    }
+}
+
 /* Adding some subtle pulse animation to the progress bar */
 @keyframes pulse {
     0% {
@@ -345,8 +375,8 @@ canvas {
 #adoptPetsChart,
 #lostPetsChart,
 #foundPetsChart {
-    width: 90%; /* Full width of its container */
-    max-width: 90%; /* Prevent it from growing too large */
+    width: 100%; /* Full width of its container */
+    max-width: 100%; /* Prevent it from growing too large */
     height: auto; /* Let the height adjust automatically */
     margin: 20px auto; /* Center the chart horizontally */
 }

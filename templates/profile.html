@@ -28,8 +28,15 @@
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 80%;
+    width: 100%;
     max-width: 400px; /* Ensures the modal does not become too wide */
+    text-align: left; /* Ensure the text is left-aligned */
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 /* Close button styles */
@@ -97,6 +104,11 @@ button[type="submit"]:hover {
     margin-left: 45%;
     margin-top: -10px;
     cursor: pointer;
+}
+@media (max-width: 480px) {
+    #editProfileBtn {
+        margin-left: 40%;
+    }
 }
     </style>
 </head>
@@ -166,7 +178,74 @@ button[type="submit"]:hover {
         </section>
 
        <!-- Logout button -->
-       <li id="logoutBtn"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i> LOGOUT</li>    
+       <li id="logoutBtn"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i> LOGOUT</li>
+       
+       <!-- Modal for Editing a Pet -->
+        <div id="editPetModal" class="modal">
+            <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Pet</h2>
+            <form id="editPetForm">
+                <input type="hidden" id="editPetId" />
+                <label for="editPetName">Name:</label>
+                <input type="text" id="editPetName" required>
+                <label for="editPetBreed">Breed:</label>
+                <input type="text" id="editPetBreed">
+                <label for="editPetDescription">Description:</label>
+                <textarea id="editPetDescription"></textarea>
+                <label for="editPetLocation">Location:</label>
+                <input type="text" id="editPetLocation">
+                <label for="editPetContact">Contact:</label>
+                <input type="text" id="editPetContact">
+                <!-- Add other fields as necessary -->
+                <button type="submit">Save Changes</button>
+            </form>
+            </div>
+        </div>
+
+        <!-- Modal for Editing a Lost Pet -->
+        <div id="editLostPetModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditLostModal()">&times;</span>
+                <h2>Edit Lost Pet</h2>
+                <form id="editLostPetForm">
+                    <input type="hidden" id="editLostPetId" />
+                    <label for="editLostPetName">Name:</label>
+                    <input type="text" id="editLostPetName" required>
+                    <label for="editLostPetBreed">Breed:</label>
+                    <input type="text" id="editLostPetBreed">
+                    <label for="editLostPetDescription">Description:</label>
+                    <textarea id="editLostPetDescription"></textarea>
+                    <label for="editLostPetLocation">Location:</label>
+                    <input type="text" id="editLostPetLocation">
+                    <label for="editLostPetContact">Contact:</label>
+                    <input type="text" id="editLostPetContact">
+                    <!-- Add other fields as necessary -->
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+        <!-- Modal for Editing a Found Pet -->
+        <div id="editFoundPetModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditFoundModal()">&times;</span>
+                <h2>Edit Found Pet</h2>
+                <form id="editFoundPetForm">
+                    <input type="hidden" id="editFoundPetId" />
+                    <label for="editFoundPetBreed">Breed:</label>
+                    <input type="text" id="editFoundPetBreed">
+                    <label for="editFoundPetDescription">Description:</label>
+                    <textarea id="editFoundPetDescription"></textarea>
+                    <label for="editFoundPetLocation">Location:</label>
+                    <input type="text" id="editFoundPetLocation">
+                    <label for="editFoundPetContact">Contact:</label>
+                    <input type="text" id="editFoundPetContact">
+                    <!-- Add other fields as necessary -->
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
 
 <!-- Overall JavaScript -->
 <script>
@@ -257,27 +336,27 @@ function getPets() {
                     const disableSelect = isConfirmYes || !isLoggedIn ? 'disabled' : '';
 
                     petElement.innerHTML = `
-                        <!-- Three dots menu -->
-                        <div class="menu" ${isLoggedIn ? '' : 'style="display: none;"'}>
-                            <i class="fas fa-ellipsis-v" onclick="toggleMenu(event)"></i>
-                            <div class="menu-content">
-                                <button onclick="deletePet(${pet.id})">Delete</button>
-                            </div>
+                    <div class="menu" ${isLoggedIn ? '' : 'style="display: none;"'}>
+                        <i class="fas fa-ellipsis-v" onclick="toggleMenu(event)"></i>
+                        <div class="menu-content">
+                            <button onclick="editPet(${pet.id})">Edit</button>
+                            <button onclick="deletePet(${pet.id})">Delete</button>
                         </div>
-                        <h2>${pet.name}</h2>
-                        <p>Breed: ${pet.breed}</p>
-                        <div class="select-wrapper">
-                            <select onchange="updateStatus(${pet.id}, this.value)" ${disableSelect}>
-                                ${statusOptions.map(option => `
-                                    <option value="${option}" ${status === option ? 'selected' : ''}>${option}</option>
-                                `).join('')}
-                            </select>
-                        </div>
-                        <br>
-                        <a href="petDetails.html?id=${pet.id}&source=pets&token=${token}&username=${usernameParam}">
-                            <img src="/${pet.image.split(',')[0]}" alt="${pet.name}">
-                        </a>
-                    `;
+                    </div>
+                    <h2>${pet.name}</h2>
+                    <p>Breed: ${pet.breed}</p>
+                    <div class="select-wrapper">
+                        <select onchange="updateStatus(${pet.id}, this.value)" ${disableSelect}>
+                            ${statusOptions.map(option => `
+                                <option value="${option}" ${status === option ? 'selected' : ''}>${option}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <br>
+                    <a href="petDetails.html?id=${pet.id}&source=pets&token=${token}&username=${usernameParam}">
+                        <img src="/${pet.image.split(',')[0]}" alt="${pet.name}">
+                    </a>
+                `;
                     petsContainer.appendChild(petElement);
                 });
             })
@@ -292,6 +371,58 @@ function getPets() {
         window.location.href = "signin.html";
     }
 }
+    function editPet(petId) {
+        // Fetch the pet data by ID (or use the already fetched data)
+        fetch(`http://localhost:3000/pet/${petId}`)
+        .then(response => response.json())
+        .then(pet => {
+            document.getElementById('editPetId').value = pet.id;
+            document.getElementById('editPetName').value = pet.name;
+            document.getElementById('editPetBreed').value = pet.breed;
+            document.getElementById('editPetDescription').value = pet.description;
+            document.getElementById('editPetLocation').value = pet.location;
+            document.getElementById('editPetContact').value = pet.contact;
+            // Open the modal
+            document.getElementById('editPetModal').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching pet details:', error));
+    }
+
+    function closeEditModal() {
+        document.getElementById('editPetModal').style.display = 'none';
+    }
+    document.getElementById('editPetForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const petId = document.getElementById('editPetId').value;
+        const updatedPetData = {
+            name: document.getElementById('editPetName').value,
+            breed: document.getElementById('editPetBreed').value,
+            description: document.getElementById('editPetDescription').value,
+            location: document.getElementById('editPetLocation').value,
+            contact: document.getElementById('editPetContact').value,
+            // Add any other fields to update
+        };
+
+        fetch(`http://localhost:3000/pets/${petId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedPetData)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Pet updated successfully.');
+                // Close the modal and refresh the pet list
+                closeEditModal();
+                getPets();
+            } else {
+                throw new Error('Failed to update pet.');
+            }
+        })
+        .catch(error => console.error('Error updating pet:', error));
+    });
 
 function updateStatus(petId, newStatus) {
     if (newStatus === 'Adopted') {
@@ -544,6 +675,7 @@ function getLost() {
                         <div class="menu" ${isLoggedIn ? '' : 'style="display: none;"'}>
                             <i class="fas fa-ellipsis-v" onclick="toggleMenu(event)"></i>
                             <div class="menu-content">
+                                 <button onclick="editLostPet(${pet.id})">Edit</button>
                                 <button onclick="deleteLostPet(${pet.id})">Delete</button>
                             </div>
                         </div>
@@ -575,6 +707,59 @@ function getLost() {
         window.location.href = "signin.html";
     }
 }
+function editLostPet(petId) {
+    // Fetch the lost pet data by ID
+    fetch(`http://localhost:3000/lost-pet/${petId}`)
+    .then(response => response.json())
+    .then(pet => {
+        document.getElementById('editLostPetId').value = pet.id;
+        document.getElementById('editLostPetName').value = pet.name;
+        document.getElementById('editLostPetBreed').value = pet.breed;
+        document.getElementById('editLostPetDescription').value = pet.description;
+        document.getElementById('editLostPetLocation').value = pet.location;
+        document.getElementById('editLostPetContact').value = pet.contact;
+        // Open the modal
+        document.getElementById('editLostPetModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching lost pet details:', error));
+}
+
+function closeEditLostModal() {
+    document.getElementById('editLostPetModal').style.display = 'none';
+}
+
+document.getElementById('editLostPetForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const petId = document.getElementById('editLostPetId').value;
+    const updatedLostPetData = {
+        name: document.getElementById('editLostPetName').value,
+        breed: document.getElementById('editLostPetBreed').value,
+        description: document.getElementById('editLostPetDescription').value,
+        location: document.getElementById('editLostPetLocation').value,
+        contact: document.getElementById('editLostPetContact').value,
+        // Add any other fields to update
+    };
+
+    fetch(`http://localhost:3000/lost-pets/${petId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedLostPetData)
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Lost pet updated successfully.');
+            // Close the modal and refresh the lost pets list
+            closeEditLostModal();
+            getLost();
+        } else {
+            throw new Error('Failed to update lost pet.');
+        }
+    })
+    .catch(error => console.error('Error updating lost pet:', error));
+});
 
 function updateLostStatus(petId, newStatus) {
     if (newStatus === 'Returned') {
@@ -814,6 +999,7 @@ function getFound() {
                         <div class="menu" ${isLoggedIn ? '' : 'style="display: none;"'}>
                             <i class="fas fa-ellipsis-v" onclick="toggleMenu(event)"></i>
                             <div class="menu-content">
+                                 <button onclick="editFoundPet(${pet.id})">Edit</button>
                                 <button onclick="deleteFoundPet(${pet.id})">Delete</button>
                             </div>
                         </div>
@@ -853,6 +1039,57 @@ function getFound() {
         window.location.href = "signin.html";
     }
 }
+function editFoundPet(petId) {
+    // Fetch the lost pet data by ID
+    fetch(`http://localhost:3000/found-pet/${petId}`)
+    .then(response => response.json())
+    .then(pet => {
+        document.getElementById('editFoundPetId').value = pet.id;
+        document.getElementById('editFoundPetBreed').value = pet.breed;
+        document.getElementById('editFoundPetDescription').value = pet.description;
+        document.getElementById('editFoundPetLocation').value = pet.location;
+        document.getElementById('editFoundPetContact').value = pet.contact;
+        // Open the modal
+        document.getElementById('editFoundPetModal').style.display = 'block';
+    })
+    .catch(error => console.error('Error fetching found pet details:', error));
+}
+
+function closeEditFoundModal() {
+    document.getElementById('editFoundPetModal').style.display = 'none';
+}
+
+document.getElementById('editFoundPetForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const petId = document.getElementById('editFoundPetId').value;
+    const updatedFoundPetData = {
+        breed: document.getElementById('editFoundPetBreed').value,
+        description: document.getElementById('editFoundPetDescription').value,
+        location: document.getElementById('editFoundPetLocation').value,
+        contact: document.getElementById('editFoundPetContact').value,
+        // Add any other fields to update
+    };
+
+    fetch(`http://localhost:3000/found-pets/${petId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedFoundPetData)
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Found pet updated successfully.');
+            // Close the modal and refresh the found pets list
+            closeEditFoundModal();
+            getFound();
+        } else {
+            throw new Error('Failed to update found pet.');
+        }
+    })
+    .catch(error => console.error('Error updating found pet:', error));
+});
 
 function updateFoundStatus(petId, newStatus) {
     const confirmationStatuses = ['Reunited'];

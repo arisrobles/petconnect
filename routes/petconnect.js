@@ -98,53 +98,66 @@ const transporter = nodemailer.createTransport({
 app.post('/signup', (req, res) => {
     const { firstname, lastname, username, password, email, location, role } = req.body;
 
+    // Validate required fields
+    if (!firstname || !lastname || !username || !password || !email || !location || !role) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+
     // Check if the username already exists in the database
     db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
         if (err) {
-            return res.status(500).send('Internal Server Error');
+            console.error('Database error during username check:', err);
+            return res.status(500).json({ error: 'Internal server error during username validation.' });
         }
+
         if (row) {
-            return res.status(400).send('Username already exists. Please choose a different username.');
+            return res.status(400).json({ error: 'Username already exists. Please choose a different username.' });
         }
 
         // If the username doesn't exist, proceed with insertion
         const dateJoined = new Date().toISOString();
         const verificationToken = crypto.randomBytes(20).toString('hex'); // Generate a token for email verification
 
-        db.run('INSERT INTO users (firstname, lastname, username, password, email, location, role, datejoined, verification_token, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-        [firstname, lastname, username, password, email, location, role, dateJoined, verificationToken, 0], (err) => {
-            if (err) {
-                return res.status(500).send('Internal Server Error');
-            }
-
-            // Send verification email
-            const verificationLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
-            const mailOptions = {
-                from: 'arisrobles07@gmail.com',
-                to: email,
-                subject: 'Email Verification - PetConnect',
-                html: `
-                    <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f9f9f9;">
-                        <img src="https://ibb.co/pbzPDY4" alt="PetConnect Logo" style="width: 150px; margin-bottom: 20px;">
-                        <h2 style="color: #333;">Welcome to PetConnect, ${firstname}!</h2>
-                        <p style="color: #555;">We're excited to have you on board. To get started, please verify your email by clicking the link below:</p>
-                        <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #ff6b6b; color: #fff; text-decoration: none; border-radius: 5px; margin: 20px 0;">
-                            Verify Your Email
-                        </a>
-                        <p style="color: #555;">If you didn't create this account, you can safely ignore this email.</p>
-                        <hr style="border: 1px solid #ddd; margin: 20px 0;">
-                        <p style="color: #aaa; font-size: 12px;">Need help? Contact us at arisrobles07@gmail.com.</p>
-                    </div>
-                `
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return res.status(500).send('Error sending verification email.');
+        db.run(
+            'INSERT INTO users (firstname, lastname, username, password, email, location, role, datejoined, verification_token, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [firstname, lastname, username, password, email, location, role, dateJoined, verificationToken, 0],
+            (err) => {
+                if (err) {
+                    console.error('Database error during user insertion:', err);
+                    return res.status(500).json({ error: 'Internal server error during user registration.' });
                 }
-                res.send('Sign up successful! Please check your email to verify your account.');
-            });
-        });
+
+                // Send verification email
+                const verificationLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
+                const mailOptions = {
+                    from: 'arisrobles07@gmail.com',
+                    to: email,
+                    subject: 'Email Verification - PetConnect',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f9f9f9;">
+                            <img src="https://ibb.co/pbzPDY4" alt="PetConnect Logo" style="width: 150px; margin-bottom: 20px;">
+                            <h2 style="color: #333;">Welcome to PetConnect, ${firstname}!</h2>
+                            <p style="color: #555;">We're excited to have you on board. To get started, please verify your email by clicking the button below:</p>
+                            <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #ff6b6b; color: #fff; text-decoration: none; border-radius: 5px; margin: 20px 0;">
+                                Verify Your Email
+                            </a>
+                            <p style="color: #555;">If you didn't create this account, you can safely ignore this email.</p>
+                            <hr style="border: 1px solid #ddd; margin: 20px 0;">
+                            <p style="color: #aaa; font-size: 12px;">Need help? Contact us at arisrobles07@gmail.com.</p>
+                        </div>
+                    `
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.error('Error sending email:', error);
+                        return res.status(500).json({ error: 'Error sending verification email. Please try again later.' });
+                    }
+
+                    res.status(200).json({ message: 'Sign up successful! Please check your email to verify your account.' });
+                });
+            }
+        );
     });
 });
 
@@ -343,6 +356,47 @@ app.put('/updatePetStatus', (req, res) => {
     });
 });
 
+// Endpoint to fetch a pet by petId
+app.get('/pet/:petId', (req, res) => {
+    const petId = req.params.petId;
+
+    const query = `SELECT * FROM pets WHERE id = ?`;
+
+    db.get(query, [petId], (err, row) => {
+        if (err) {
+            console.error('Error retrieving pet from the database:', err);
+            res.status(500).json({ error: 'Failed to retrieve pet.' });
+        } else if (row) {
+            res.status(200).json(row); // Send back the pet data
+        } else {
+            res.status(404).json({ error: 'Pet not found.' });
+        }
+    });
+});
+
+app.put('/pets/:id', (req, res) => {
+    const petId = req.params.id;
+    const updatedData = req.body;
+
+    // Update the pet in the database
+    const updateQuery = `
+        UPDATE pets
+        SET name = ?, breed = ?, description = ?, location = ?, contact = ?
+        WHERE id = ?
+    `;
+
+    const values = [updatedData.name, updatedData.breed, updatedData.description, updatedData.location, updatedData.contact, petId];
+
+    db.run(updateQuery, values, function(err) {
+        if (err) {
+            console.error('Error updating pet:', err);
+            res.status(500).send('Failed to update pet');
+        } else {
+            res.status(200).send('Pet updated successfully');
+        }
+    });
+});
+
 // Endpoint for updating lost pet status
 app.put('/updateLostPetStatus', (req, res) => {
     const { petId, status } = req.query;
@@ -358,6 +412,47 @@ app.put('/updateLostPetStatus', (req, res) => {
     });
 });
 
+// Endpoint to fetch a pet by petId
+app.get('/lost-pet/:petId', (req, res) => {
+    const petId = req.params.petId;
+
+    const query = `SELECT * FROM lostPets WHERE id = ?`;
+
+    db.get(query, [petId], (err, row) => {
+        if (err) {
+            console.error('Error retrieving pet from the database:', err);
+            res.status(500).json({ error: 'Failed to retrieve pet.' });
+        } else if (row) {
+            res.status(200).json(row); // Send back the pet data
+        } else {
+            res.status(404).json({ error: 'Pet not found.' });
+        }
+    });
+});
+
+app.put('/lost-pets/:id', (req, res) => {
+    const petId = req.params.id;
+    const updatedData = req.body;
+
+    // Update the pet in the database
+    const updateQuery = `
+        UPDATE lostPets
+        SET name = ?, breed = ?, description = ?, location = ?, contact = ?
+        WHERE id = ?
+    `;
+
+    const values = [updatedData.name, updatedData.breed, updatedData.description, updatedData.location, updatedData.contact, petId];
+
+    db.run(updateQuery, values, function(err) {
+        if (err) {
+            console.error('Error updating pet:', err);
+            res.status(500).send('Failed to update pet');
+        } else {
+            res.status(200).send('Pet updated successfully');
+        }
+    });
+});
+
 // Endpoint for updating found pet status
 app.put('/updateFoundPetStatus', (req, res) => {
     const { petId, status } = req.query;
@@ -370,6 +465,47 @@ app.put('/updateFoundPetStatus', (req, res) => {
         }
         // Send a success response if the update was successful
         res.status(200).send(`Status of found pet with ID ${petId} updated successfully.`);
+    });
+});
+
+// Endpoint to fetch a pet by petId
+app.get('/found-pet/:petId', (req, res) => {
+    const petId = req.params.petId;
+
+    const query = `SELECT * FROM foundPets WHERE id = ?`;
+
+    db.get(query, [petId], (err, row) => {
+        if (err) {
+            console.error('Error retrieving pet from the database:', err);
+            res.status(500).json({ error: 'Failed to retrieve pet.' });
+        } else if (row) {
+            res.status(200).json(row); // Send back the pet data
+        } else {
+            res.status(404).json({ error: 'Pet not found.' });
+        }
+    });
+});
+
+app.put('/found-pets/:id', (req, res) => {
+    const petId = req.params.id;
+    const updatedData = req.body;
+
+    // Update the pet in the database
+    const updateQuery = `
+        UPDATE foundPets
+        SET breed = ?, description = ?, location = ?, contact = ?
+        WHERE id = ?
+    `;
+
+    const values = [updatedData.breed, updatedData.description, updatedData.location, updatedData.contact, petId];
+
+    db.run(updateQuery, values, function(err) {
+        if (err) {
+            console.error('Error updating pet:', err);
+            res.status(500).send('Failed to update pet');
+        } else {
+            res.status(200).send('Pet updated successfully');
+        }
     });
 });
 
@@ -1058,12 +1194,17 @@ app.post('/forgot-password', (req, res) => {
             }
 
             const transporter = nodemailer.createTransport({
-                service: 'Gmail',
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false, // use TLS
                 auth: {
                     user: 'arisrobles07@gmail.com',
-                    pass: 'yeru uzzm vzzg qaiv'
+                    pass: 'yeru uzzm vzzg qaiv' // Use an app password instead of your account password if 2FA is enabled
+                },
+                tls: {
+                    rejectUnauthorized: false
                 }
-            });
+            });       
 
             const mailOptions = {
                 to: email,
@@ -1071,7 +1212,7 @@ app.post('/forgot-password', (req, res) => {
                 subject: 'PetConnect Password Reset Request',
                 html: `
                     <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f9f9f9;">
-                        <img src="assets/PetConnect_Logo.png" alt="PetConnect Logo" style="width: 150px; margin-bottom: 20px;">
+                        <img src="assets/logos/PetConnect_Logo.png" alt="PetConnect Logo" style="width: 150px; margin-bottom: 20px;">
                         <h2 style="color: #ff6b6b;">Password Reset Request</h2>
                         <p style="color: #555;">Hello,</p>
                         <p style="color: #555;">We noticed you requested a password reset for your PetConnect account. Don't worry, we've got you covered!</p>

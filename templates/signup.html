@@ -172,7 +172,7 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <div class="password-input-container">
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required>
                     <span class="toggle-password" onclick="togglePasswordVisibility()">
                         <i id="passwordToggleIcon" class="fas fa-eye"></i>
                     </span>
@@ -204,7 +204,7 @@
              <div class="terms-container">
                 <input type="checkbox" id="terms-checkbox">
                 <label for="terms-checkbox">
-                    By signing up you agree to our <a href="/public/terms.html">Terms and Conditions</a> and <a href="/public/privacy.html">Privacy Policy</a>.
+                    By signing up you agree to our <a href="public/terms.html">Terms and Conditions</a> and <a href="public/privacy.html">Privacy Policy</a>.
                 </label>
             </div>
             
@@ -239,57 +239,48 @@
             });
 
             document.getElementById("signupForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent form submission
-            var firstname = document.getElementById("firstname").value;
-            var lastname = document.getElementById("lastname").value;
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            var email = document.getElementById("email").value;
-            var location = document.getElementById("location").value;
-            var role = document.getElementById("role").value; // Get the selected role
-            var errorMessage = document.getElementById("error-message");
+        event.preventDefault(); // Prevent form submission
+        var firstname = document.getElementById("firstname").value;
+        var lastname = document.getElementById("lastname").value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var email = document.getElementById("email").value;
+        var location = document.getElementById("location").value;
+        var role = document.getElementById("role").value; // Get the selected role
 
-            // You can perform client-side validation here
+        // You can perform client-side validation here
 
-            // Reset error message
-            errorMessage.style.display = "none";
-            errorMessage.textContent = "";
-
-            fetch(`http://localhost:3000/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    firstname: firstname,
-                    lastname: lastname,
-                    username: username,
-                    password: password,
-                    email: email,
-                    location: location,
-                    role: role // Include the role in the request
-                })
+        // Send signup request to the server
+        fetch(`http://localhost:3000/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                firstname: firstname,
+                lastname: lastname,
+                username: username,
+                password: password,
+                email: email,
+                location: location,
+                role: role // Include the role in the request
             })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text); });
-                }
-                return response.text();
-            })
-            .then(message => {
-                console.log(message); // Log the success message
-                // Redirect user or show success notification
-                window.location.href = 'verificationMessage.html'; // Redirect to a success page
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-                if (error.message === 'Username already exists. Please choose a different username.') {
-                    // Show the error message below the form
-                    errorMessage.style.display = "block";
-                    errorMessage.textContent = error.message;
-                }
-            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text); });
+            }
+            return response.text();
+        })
+        .then(message => {
+            alert(message); // Show success message in an alert
+            // Optionally, redirect the user after success
+            window.location.href = "verificationMessage.html"; // Change to your success page
+        })
+        .catch(error => {
+            alert(`Check Your Email: We have sent a verification email to your email account. Please verify your account to continue.`); // Show error message in an alert
         });
+    });
         // Function to perform real-time validation of username
         function validateUsername() {
             var username = document.getElementById("username").value;

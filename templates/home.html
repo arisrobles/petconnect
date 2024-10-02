@@ -107,7 +107,7 @@
         </div>
     </div>
 </div>
-    
+    <div>
     <div class="slide" id="slide1">
         <div class="contentMessage">
             <h1>Connecting <span style="color: orange;">Hearts</span>, <br>Creating <span style="color: orange;">Homes</span> — <br>Where <span style="color: orange;">Pets</span> Find Family</h1>
@@ -116,43 +116,43 @@
         </div>
     </div>
     <div class="slide" id="slide2">
-        <div class="content" id="homeSection">
-            <h1>DON'T <span style="color: orange; font-size: 60px;">S</span>HOP, <span style="color: orange; font-size: 60px;">A</span>DOPT!</h1>
+        <div class="contentMessage" id="homeSection">
+            <h1>DON'T <span style="color: orange;">S</span>HOP, <span style="color: orange;">A</span>DOPT!</h1>
             <br>
             <br>
             <br>
             <br>
             <h2>Welcome to PetConnect</h2>
             <br>
-            <h3>Where pets meet their perfect match!</h3>
+            <p>Where pets meet their perfect match!</hp>
         </div>
     </div>
     <div class="slide" id="slide3">
-        <div class="content" id="homeSection">
-            <h1>FIND YOUR <span style="color: orange; font-size: 60px;">F</span>OREVER <span style="color: orange; font-size: 60px;">F</span>RIEND!</h1>
+        <div class="contentMessage" id="homeSection">
+            <h1>FIND YOUR <span style="color: orange;">F</span>OREVER <span style="color: orange;">F</span>RIEND!</h1>
             <br>
             <br>
             <br>
             <br>
             <h2>Join PetConnect</h2>
             <br>
-            <h3>Connecting pets with loving families!</h3>
+            <p>Connecting pets with loving families!</p>
         </div>
     </div>
     <div class="slide" id="slide4">
-        <div class="content" id="homeSection">
-            <h1>HELP <span style="color: orange; font-size: 60px;">L</span>OST <span style="color: orange; font-size: 60px;">P</span>ETS <span style="color: orange; font-size: 60px;">F</span>IND <span style="color: orange; font-size: 60px;">H</span>OME!</h1>
+        <div class="contentMessage" id="homeSection">
+            <h1>HELP <span style="color: orange;">L</span>OST <span style="color: orange;">P</span>ETS <span style="color: orange;">F</span>IND <span style="color: orange;">H</span>OME!</h1>
             <br>
             <br>
             <br>
             <br>
             <h2>Lost and Found</h2>
             <br>
-            <h3>Reuniting pets with their families.</h3>
+            <p>Reuniting pets with their families.</p>
         </div>
     </div>
 </div>
-
+</div>
 <br><br>
 
     <div id="adoptSection">
@@ -807,130 +807,137 @@ populateBreeds();
  <!-- Include Toastify JS for welcoming user -->
  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
  <script>
-   document.addEventListener('DOMContentLoaded', function() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var usernameParam = urlParams.get('username');
-    var token = localStorage.getItem('token');
-    if (!usernameParam) {
-        window.location.href = "signin.html";
-    } else {
-        console.log(`User ${usernameParam}`);
-        var loggedIn = sessionStorage.getItem('loggedIn');
-        if (!loggedIn) {
-            displayToast(usernameParam);
-            sessionStorage.setItem('loggedIn', true);
-            setTimeout(function() {
-                displayWelcomeGif(usernameParam);
-            }, 2000);
-        }
-    }
-
-    function displayToast(username) {
-        Toastify({
-            text: `Welcome ${username}!`,
-            duration: 3000,
-            close: true,
-            gravity: "top",
-            position: "center",
-            background: "linear-gradient(to right, #00b09b, #96c93d)",
-            stopOnFocus: true
-        }).showToast();
-    }
-
-    function displayWelcomeGif(username) {
-        var messages = [
-            `Hey ${username}, I'm Pampoo, great to see you! Why not explore our adoption features? You might find your new best friend!`,
-            `Have you seen the new pets that just became available? They're waiting for someone like you!`,
-            `Lost your pet? Don't worry! Take a look at our latest lost pet listings. Your furry friend could be here!`,
-            `Found a pet wandering around, ${username}? Report it here and let's help them get back home. Someone's missing their buddy!`
-        ];
-        var currentMessageIndex = 0;
-        var overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        overlay.style.zIndex = '9999';
-        overlay.style.pointerEvents = 'auto';
-
-        var mainContainer = document.createElement('div');
-        mainContainer.style.position = 'absolute';
-        mainContainer.style.top = '83%';
-        mainContainer.style.left = '75%';
-        mainContainer.style.transform = 'translate(-50%, -50%)';
-        mainContainer.style.display = 'flex';
-        mainContainer.style.justifyContent = 'center';
-        mainContainer.style.alignItems = 'center';
-        mainContainer.style.zIndex = '10000';
-
-        var gifContainer = document.createElement('div');
-        gifContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        gifContainer.style.padding = '20px';
-        gifContainer.style.borderRadius = '10px';
-        gifContainer.style.display = 'flex';
-        gifContainer.style.width = '600px';
-        gifContainer.style.alignItems = 'center';
-        gifContainer.style.cursor = 'pointer';
-
-        var gifImage = document.createElement('img');
-        gifImage.src = '/assets/gifs/dog-animated-icon-download-in--unscreen.gif';
-        gifImage.alt = 'Welcome GIF';
-        gifImage.style.width = '200px';
-        gifImage.style.marginLeft = '20px';
-
-        var message = document.createElement('p');
-        message.textContent = messages[currentMessageIndex];
-        message.style.fontSize = '18px';
-        message.style.color = '#fff';
-        message.style.margin = '0';
-
-        var utterance = new SpeechSynthesisUtterance();
-        function updateMessage() {
-            currentMessageIndex++;
-            if (currentMessageIndex < messages.length) {
-                speechSynthesis.cancel(); // Stop the current speech
-                message.textContent = messages[currentMessageIndex];
-                speakMessage(messages[currentMessageIndex]);
-            } else {
-                clearInterval(messageInterval);
-                overlay.style.display = 'none';
-                mainContainer.style.display = 'none';
-                document.body.style.overflow = 'auto';
+    document.addEventListener('DOMContentLoaded', function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var usernameParam = urlParams.get('username');
+        var token = localStorage.getItem('token');
+        if (!usernameParam) {
+            window.location.href = "signin.html";
+        } else {
+            console.log(`User ${usernameParam}`);
+            var loggedIn = sessionStorage.getItem('loggedIn');
+            if (!loggedIn) {
+                displayToast(usernameParam);
+                sessionStorage.setItem('loggedIn', true);
+                setTimeout(function () {
+                    displayWelcomeGif(usernameParam);
+                }, 2000);
             }
         }
 
-        function speakMessage(text) {
-            utterance.text = text;
-            var voices = speechSynthesis.getVoices();
-            utterance.voice = voices.find(voice => voice.name.includes('Male')) || voices[0];
-            utterance.onend = function() {
-                updateMessage();
-            };
-            speechSynthesis.speak(utterance);
+        function displayToast(username) {
+            Toastify({
+                text: `Welcome ${username}!`,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                stopOnFocus: true
+            }).showToast();
         }
 
-        var messageInterval = setInterval(function() {
-            if (speechSynthesis.speaking) return;
-            updateMessage();
-        }, 11000);
+        function displayWelcomeGif(username) {
+            var messages = [
+                `Hey ${username}, I'm Pampoo, great to see you! Why not explore our adoption features? You might find your new best friend!`,
+                `Have you seen the new pets that just became available? They're waiting for someone like you!`,
+                `Lost your pet? Don't worry! Take a look at our latest lost pet listings. Your furry friend could be here!`,
+                `Found a pet wandering around, ${username}? Report it here and let's help them get back home. Someone's missing their buddy!`
+            ];
+            var currentMessageIndex = 0;
+            var overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '9999';
+            overlay.style.pointerEvents = 'auto';
 
-        gifContainer.addEventListener('click', function() {
-            speechSynthesis.cancel(); // Stop the current speech
-            updateMessage();
-        });
+            var mainContainer = document.createElement('div');
+            mainContainer.style.position = 'absolute';
+            mainContainer.style.top = '50%';
+            mainContainer.style.left = '50%';
+            mainContainer.style.transform = 'translate(-50%, -50%)';
+            mainContainer.style.display = 'flex';
+            mainContainer.style.justifyContent = 'center';
+            mainContainer.style.alignItems = 'center';
+            mainContainer.style.zIndex = '10000';
+            mainContainer.style.width = '100%';
+            mainContainer.style.height = '100%';
 
-        gifContainer.appendChild(message);
-        gifContainer.appendChild(gifImage);
-        mainContainer.appendChild(gifContainer);
-        document.body.appendChild(overlay);
-        document.body.appendChild(mainContainer);
-        document.body.style.overflow = 'hidden';
+            var gifContainer = document.createElement('div');
+            gifContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            gifContainer.style.padding = '20px';
+            gifContainer.style.borderRadius = '10px';
+            gifContainer.style.display = 'flex';
+            gifContainer.style.justifyContent = 'space-between';
+            gifContainer.style.flexDirection = 'column'; // Stack content vertically on small screens
+            gifContainer.style.width = '100%'; // Full width
+            gifContainer.style.maxWidth = '1200px'; // Maximum width for large screens
+            gifContainer.style.cursor = 'pointer';
 
-        speakMessage(messages[currentMessageIndex]);
-    }
-});
+            var gifImage = document.createElement('img');
+            gifImage.src = '/assets/gifs/dog-animated-icon-download-in--unscreen.gif';
+            gifImage.alt = 'Welcome GIF';
+            gifImage.style.width = '150px';
+            gifImage.style.margin = '10px auto'; // Center the image
+
+            var message = document.createElement('p');
+            message.textContent = messages[currentMessageIndex];
+            message.style.fontSize = '18px';
+            message.style.color = '#fff';
+            message.style.textAlign = 'center';
+            message.style.margin = '10px 0';
+            message.style.width = '100%'; // Ensure the text takes full width
+            message.style.padding = '0 20px'; // Add padding to ensure the message is not touching the sides
+
+            var utterance = new SpeechSynthesisUtterance();
+            function updateMessage() {
+                currentMessageIndex++;
+                if (currentMessageIndex < messages.length) {
+                    speechSynthesis.cancel(); // Stop the current speech
+                    message.textContent = messages[currentMessageIndex];
+                    speakMessage(messages[currentMessageIndex]);
+                } else {
+                    clearInterval(messageInterval);
+                    overlay.style.display = 'none';
+                    mainContainer.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+
+            function speakMessage(text) {
+                utterance.text = text;
+                var voices = speechSynthesis.getVoices();
+                utterance.voice = voices.find(voice => voice.name.includes('Male')) || voices[0];
+                utterance.onend = function () {
+                    updateMessage();
+                };
+                speechSynthesis.speak(utterance);
+            }
+
+            var messageInterval = setInterval(function () {
+                if (speechSynthesis.speaking) return;
+                updateMessage();
+            }, 11000);
+
+            gifContainer.addEventListener('click', function () {
+                speechSynthesis.cancel(); // Stop the current speech
+                updateMessage();
+            });
+
+            gifContainer.appendChild(gifImage);
+            gifContainer.appendChild(message);
+            mainContainer.appendChild(gifContainer);
+            document.body.appendChild(overlay);
+            document.body.appendChild(mainContainer);
+            document.body.style.overflow = 'hidden';
+
+            speakMessage(messages[currentMessageIndex]);
+        }
+    });
 </script>
 
  <!-- Redirect to profile page -->

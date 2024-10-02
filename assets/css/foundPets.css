@@ -163,20 +163,27 @@ nav {
         max-width: 120px;
         height: 50px;
         font-size: 14px;
+        margin-top: -10px;
     }
-
+    .container h2 {
+        margin: 0;
+        margin-left: -4%;
+    }
     .menu-toggle {
         display: flex;
     }
 }
-
-
-
-        /* Add your CSS styling for the lostPets.html page here */
-        * {
-            margin: 0;
-            padding: 0;
-        }
+html, body {
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%; /* Ensure body width fits the viewport */
+}
+    * {
+        margin: 0;
+        padding: 0;
+    }
 
         .intro-content {
         display: flex;
@@ -617,7 +624,8 @@ button:disabled {
     display: flex; /* Use flexbox for horizontal alignment */
     gap: 20px; /* Add space between cards */
 }
-/* Add CSS to display cards horizontally */
+
+/* Style for card container */
 .card-container {
     display: flex; /* Use flexbox */
     flex-direction: row; /* Arrange cards horizontally */
@@ -637,6 +645,43 @@ button:disabled {
     font-size: 28px;
     line-height: normal;
     margin-bottom: 5px;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .section,
+    .card-container {
+        flex-direction: column; /* Stack cards vertically */
+        gap: 15px; /* Adjust gap between items */
+    }
+
+    .card {
+        width: 100%; /* Ensure cards take full width on smaller screens */
+        margin-right: 0; /* Remove margin on the right */
+        border-radius: 10px; /* Adjust border radius for full rectangle */
+    }
+
+    .dialog-content {
+        width: 90%; /* Make the dialog content take more width on small screens */
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+}
+
+/* Media query for very small screens (like mobile) */
+@media (max-width: 480px) {
+    #card h4 {
+        font-size: 22px; /* Adjust font size for smaller screens */
+    }
+
+    .dialog-content {
+        font-size: 14px; /* Adjust font size for better readability on mobile */
+        padding: 10px; /* Reduce padding */
+    }
+
+    .section,
+    .card-container {
+        gap: 10px; /* Further adjust spacing for smaller screens */
+    }
 }
 
 .image-container {
@@ -825,27 +870,4 @@ button:disabled {
     .pet-dialog .nav-arrow {
         padding: 5px;
     }
-    .dialog-content {
-        height: 50%;
-    }
-    #aboutUsContent p {
-        font-size: 14px;
-    }
-    #aboutUsContent h4 { 
-        font-size: 22px;
-    }
-    #faqContent p {
-        font-size: 14px;
-    }
-    #faqContent h4 { 
-        font-size: 22px;
-    }
-    .card{
-        width: 100%;
-        height: 80%;
-    }
-    .card-container{
-        width: 200%;
-        height: 80%;
-    }    
     }  
